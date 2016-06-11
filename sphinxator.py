@@ -120,9 +120,9 @@ def main():
     |_|
 
 szyfrator/deszyfrator LSM
-Michał "Bezduszny" Szewczak 2016
+Michal "Bezduszny" Szewczak 2016
 
-Wpisz Q, aby powrócić.
+Wpisz Q, aby powrocic.
 """
     print(banner)
 
