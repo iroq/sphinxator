@@ -26,7 +26,7 @@ def cezar(text, shift):
 
 def harcerski(text, template):
     # strip dashes
-    template = "".join(template.split('-'))
+    template = "".join(template.lower().split('-'))
     template = list(template)
 
     mapping = {}
@@ -42,7 +42,7 @@ def harcerski(text, template):
 
     encrypted = []
     for c in text:
-        if not is_lowercase_letter(c):
+        if not is_lowercase_letter(c) or c not in mapping:
             new_c = c
         else:
             new_c = mapping[c]
