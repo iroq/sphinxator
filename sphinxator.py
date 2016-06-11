@@ -18,7 +18,7 @@ def cezar(text, shift):
         if not is_lowercase_letter(c):
             new_c = c
         else:
-            new_c = chr((ord(c)-ord('a')+shift)+ord('a'))
+            new_c = chr((ord(c)-ord('a')+shift)%26+ord('a'))
         encrypted.append(new_c)
 
     return "".join(encrypted)
