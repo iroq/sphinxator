@@ -1,9 +1,6 @@
 #!/usr/bin/env/python
-"""
-sphinxator - szyfrator/deszyfrator LSM
 
-Michał Szewczak 2016
-"""
+
 from itertools import cycle
 import sys
 from base64 import b64decode
