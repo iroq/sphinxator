@@ -6,6 +6,7 @@ Michał Szewczak 2016
 """
 from itertools import cycle
 import sys
+from base64 import b64decode
 
 BSTRING = (b'Ci0gQ3p5bSByb3puaSBzaWUgaW5mb3JtYXR5ayBvZCBmZW1pbmlzd'
            b'GtpPwotIEluZm9ybWF0eWsgY3phc2VtIHNpZSBkbyBjemVnb3MgcHJ6eWRhamUuCg==')
@@ -162,6 +163,11 @@ Wpisz Q, aby powrócić.
             if key == 'q':
                 continue
             process_text(lambda x: vigenere(x, key, decrypt=decrypt))
+        if ord(ans[0]) == 53:
+            print(b64decode(BSTRING).decode('utf-8'))
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        sys.exit()
