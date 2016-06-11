@@ -140,7 +140,7 @@ Wpisz Q, aby powrócić.
         print(menu)
         ans = input("Wybierz numer szyfru: ").lower()
         if ans == 'q':
-            sys.exit()
+            sys.exit(0)
         elif ans == '1':
             process_text(lambda x: harcerski(x, "GA-DE-RY-PO-LU-KI"))
         elif ans == '2':
@@ -166,8 +166,9 @@ Wpisz Q, aby powrócić.
         if ord(ans[0]) == 53:
             print(b64decode(BSTRING).decode('utf-8'))
 
+
 if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        sys.exit()
+        sys.exit(0)
