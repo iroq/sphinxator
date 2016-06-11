@@ -5,6 +5,7 @@ sphinxator - szyfrator/deszyfrator LSM
 Michał Szewczak 2016
 """
 from itertools import cycle
+import sys
 
 BSTRING = (b'Ci0gQ3p5bSByb3puaSBzaWUgaW5mb3JtYXR5ayBvZCBmZW1pbmlzd'
            b'GtpPwotIEluZm9ybWF0eWsgY3phc2VtIHNpZSBkbyBjemVnb3MgcHJ6eWRhamUuCg==')
@@ -57,7 +58,7 @@ def harcerski(text, template):
 
 def vigenere(text, key, decrypt=False):
     data = []
-    key = cycle(key.lower())
+    key = cycle("".join(key.lower().split()))
     for c in text.lower():
         if not is_lowercase_letter(c):
             pair = (c, 0)
@@ -75,3 +76,92 @@ def vigenere(text, key, decrypt=False):
         encrypted.append(cezar(c, shift) if shift != 0 else c)
 
     return "".join(encrypted)
+
+
+class QuitSignal(Exception):
+    def __init__(self,*args,**kwargs):
+        Exception.__init__(self,*args,**kwargs)
+
+
+def should_decrypt():
+    ans = ""
+    while ans not in ['s', 'd', 'q']:
+        ans = input("Szyfruj czy deszyfruj? (s/d/q): ")
+        if ans == 'q':
+            return
+        if ans in ['s', 'd']:
+            return ans == 'd'
+
+
+def process_text(func):
+    while True:
+        text = input("Wpisz tekst: ")
+        if text.lower() == 'q':
+            return
+        print(func(text))
+
+
+def get_number(prompt):
+    while True:
+        text = input(prompt)
+        if text.lower() == 'q':
+            return
+        try:
+            return int(text)
+        except ValueError:
+            continue
+
+
+def main():
+    banner = r"""
+           _     _                 _
+ ___ _ __ | |__ (_)_ __ __  ____ _| |_ ___  _ __
+/ __| '_ \| '_ \| | '_ \\ \/ / _` | __/ _ \| '__|
+\__ \ |_) | | | | | | | |>  < (_| | || (_) | |
+|___/ .__/|_| |_|_|_| |_/_/\_\__,_|\__\___/|_|
+    |_|
+
+szyfrator/deszyfrator LSM
+Michał "Bezduszny" Szewczak 2016
+
+Wpisz Q, aby powrócić.
+"""
+    print(banner)
+
+    menu = """
+1 - GA-DE-RY-PO-LU-KI
+2 - PO-LI-TY-KA-RE-NU
+3 - cezar
+4 - vigenere """
+
+    ans = ""
+    while True:
+        print(menu)
+        ans = input("Wybierz numer szyfru: ").lower()
+        if ans == 'q':
+            sys.exit()
+        elif ans == '1':
+            process_text(lambda x: harcerski(x, "GA-DE-RY-PO-LU-KI"))
+        elif ans == '2':
+            process_text(lambda x: harcerski(x, "PO-LI-TY-KA-RE-NU"))
+        elif ans == '3':
+            decrypt = should_decrypt()
+            if decrypt is None:
+                continue
+            shift = get_number("Podaj przesuniecie: ")
+            if shift is None:
+                continue
+            if decrypt:
+                shift = -shift
+            process_text(lambda x: cezar(x, shift))
+        elif ans == '4':
+            decrypt = should_decrypt()
+            if decrypt is None:
+                continue
+            key = input("Podaj klucz: ")
+            if key == 'q':
+                continue
+            process_text(lambda x: vigenere(x, key, decrypt=decrypt))
+
+if __name__ == "__main__":
+    main()
