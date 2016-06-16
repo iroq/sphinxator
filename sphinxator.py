@@ -4,6 +4,7 @@
 from itertools import cycle
 import sys
 from base64 import b64decode
+import string
 
 BSTRING = (b'Ci0gQ3p5bSByb3puaSBzaWUgaW5mb3JtYXR5ayBvZCBmZW1pbmlzd'
            b'GtpPwotIEluZm9ybWF0eWsgY3phc2VtIHNpZSBkbyBjemVnb3MgcHJ6eWRhamUuCg==')
@@ -74,6 +75,80 @@ def vigenere(text, key, decrypt=False):
         encrypted.append(cezar(c, shift) if shift != 0 else c)
 
     return "".join(encrypted)
+
+
+def playfair(text, key, decrypt=False):
+    alphabet = string.ascii_lowercase
+    table_size = 5
+    pad_char = 'x'
+
+    # sanitize texts
+    text = text.lower().replace(' ', '')
+    key = key.lower().replace(' ', '')
+
+    # we treat I and J as the same letter
+    alphabet = alphabet.replace('j', '')
+    assert len(alphabet) == table_size**2
+    text = text.replace('j', 'i')
+    key = key.replace('j', 'i')
+
+    # insert X's in between identical pairs
+    new_text = []
+    for i in range(0, len(text), 2):
+        a = text[i]
+        try:
+            b = text[i+1]
+            new_text += [a, pad_char, b] if a == b else [a, b]
+        except IndexError:
+            new_text.append(a)
+            break
+
+    # pad to even
+    if len(new_text) % 2 != 0:
+        new_text.append(pad_char)
+
+    # prepare keytable
+    processed = set()
+    alphabet = list(alphabet)
+    stripped = []
+    for c in key:
+        if not c.islower() or c in processed:
+            continue
+        stripped.append(c)
+        alphabet.remove(c)
+        processed.add(c)
+
+    alphabet = stripped + alphabet
+    keytable = {}
+    assert len(alphabet) == table_size**2
+    for i in range(table_size):
+        for j in range(table_size):
+            c = alphabet[table_size*i + j]
+            keytable[(i, j)] = c
+            keytable[c] = (i, j)
+
+    # perform encryption/decryption
+    result = []
+    shift = -1 if decrypt else 1
+    for i in range(0, len(new_text), 2):
+        a = new_text[i]
+        b = new_text[i+1]
+        ax, ay = keytable[a]
+        bx, by = keytable[b]
+        if ax == bx:
+            a = keytable[(ax, (ay+shift) % table_size)]
+            b = keytable[(bx, (by+shift) % table_size)]
+        elif ay == by:
+            a = keytable[((ax+shift) % table_size, ay)]
+            b = keytable[((bx+shift) % table_size, by)]
+        else:
+            a = keytable[ax, by]
+            b = keytable[bx, ay]
+
+        result.append(a)
+        result.append(b)
+
+    return ''.join(result)
 
 
 def should_decrypt():
