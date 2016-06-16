@@ -76,11 +76,6 @@ def vigenere(text, key, decrypt=False):
     return "".join(encrypted)
 
 
-class QuitSignal(Exception):
-    def __init__(self,*args,**kwargs):
-        Exception.__init__(self,*args,**kwargs)
-
-
 def should_decrypt():
     ans = ""
     while ans not in ['s', 'd', 'q']:
