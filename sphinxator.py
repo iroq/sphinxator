@@ -200,7 +200,8 @@ Wpisz Q, aby powrocic.
 1 - GA-DE-RY-PO-LU-KI
 2 - PO-LI-TY-KA-RE-NU
 3 - cezar
-4 - vigenere """
+4 - vigenere 
+6 - playfair """
 
     ans = ""
     while True:
@@ -230,6 +231,14 @@ Wpisz Q, aby powrocic.
             if key == 'q':
                 continue
             process_text(lambda x: vigenere(x, key, decrypt=decrypt))
+        elif ans == '6':
+            decrypt = should_decrypt()
+            if decrypt is None:
+                continue
+            key = input("Podaj klucz: ")
+            if key == 'q':
+                continue
+            process_text(lambda x: playfair(x, key, decrypt=decrypt))
         if len(ans) == 1 and ord(ans[0]) == 53:
             print(b64decode(BSTRING).decode('utf-8'))
 
