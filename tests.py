@@ -52,4 +52,4 @@ class TestCipherMethods(unittest.TestCase):
         text = "nordkunkqzpcnd"
         key = "keyword"
         decrypted = sphinxator.playfair(text, key, decrypt=True)
-        self.assertEqual()
+        self.assertEqual("secretmesxsage", decrypted)
