@@ -194,6 +194,7 @@ def main():
     |_|
 
 szyfrator/deszyfrator LSM
+v. 1.1.0
 Michal "Bezduszny" Szewczak 2016
 
 Wpisz Q, aby powrocic.
