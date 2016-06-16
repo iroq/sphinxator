@@ -161,11 +161,15 @@ def should_decrypt():
             return ans == 'd'
 
 
-def process_text(func):
+def process_text(func, lowercase_only = True):
     while True:
         text = input("Wpisz tekst: ")
         if text.lower() == 'q':
             return
+        if (lowercase_only and
+                any(not c.islower() and c != ' ' for c in text)):
+            print("Tekst moze zawierac tylko litery i spacje")
+            continue
         print(func(text))
 
 
@@ -200,7 +204,7 @@ Wpisz Q, aby powrocic.
 1 - GA-DE-RY-PO-LU-KI
 2 - PO-LI-TY-KA-RE-NU
 3 - cezar
-4 - vigenere 
+4 - vigenere
 6 - playfair """
 
     ans = ""
@@ -237,6 +241,9 @@ Wpisz Q, aby powrocic.
                 continue
             key = input("Podaj klucz: ")
             if key == 'q':
+                continue
+            if any(not c.islower() and c!=' ' for c in key):
+                print("Klucz moze zawierac tylko litery i spacje")
                 continue
             process_text(lambda x: playfair(x, key, decrypt=decrypt))
         if len(ans) == 1 and ord(ans[0]) == 53:
