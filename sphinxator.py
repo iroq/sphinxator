@@ -230,7 +230,7 @@ Wpisz Q, aby powrocic.
             if key == 'q':
                 continue
             process_text(lambda x: vigenere(x, key, decrypt=decrypt))
-        if ord(ans[0]) == 53:
+        if len(ans) == 1 and ord(ans[0]) == 53:
             print(b64decode(BSTRING).decode('utf-8'))
 
 
